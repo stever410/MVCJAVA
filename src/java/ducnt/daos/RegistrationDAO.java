@@ -6,9 +6,12 @@
 package ducnt.daos;
 
 import ducnt.db.MyConnection;
+import ducnt.dtos.RegistrationDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -41,12 +44,38 @@ public class RegistrationDAO {
             preStm.setString(1, username);
             preStm.setString(2, password);
             rs = preStm.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 role = rs.getString("Role");
             }
         } finally {
             closeConnection();
         }
         return role;
+    }
+
+    public List<RegistrationDTO> findByLikeName(String search) throws Exception {
+        List<RegistrationDTO> result = null;
+        String username, fullname, role;
+        RegistrationDTO dto = null;
+        try {
+            conn = MyConnection.makeConnection();
+            String sql = "Select Username, Fullname, Role "
+                    + "From Registration "
+                    + "Where Fullname Like ?";
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, "%" + search + "%");
+            rs = preStm.executeQuery();
+            result = new ArrayList<RegistrationDTO>();
+            while(rs.next()) {
+                username = rs.getString("Username");
+                fullname = rs.getString("Fullname");
+                role = rs.getString("Role");
+                dto = new RegistrationDTO(username, fullname, role);
+                result.add(dto);
+            }
+        } finally {
+            closeConnection();
+        }
+        return result;
     }
 }

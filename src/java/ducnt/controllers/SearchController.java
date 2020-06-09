@@ -5,7 +5,10 @@
  */
 package ducnt.controllers;
 
+import ducnt.daos.RegistrationDAO;
+import ducnt.dtos.RegistrationDTO;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,13 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author ngota
  */
-public class MainController extends HttpServlet {
-
-    private static final String ERROR = "error.jsp";
-    private static final String LOGIN = "LoginController";
-    private static final String REGISTER = "RegisterController";
-    private static final String SEARCH = "SearchController";
-
+public class SearchController extends HttpServlet {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,22 +31,18 @@ public class MainController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
         try {
-            String action = request.getParameter("action");
-            if (action.equals("Login")) {
-                url = LOGIN;
-            } else if (action.equals("Register")) {
-                url = REGISTER;
-            } else if (action.equals("Search")) {
-                url = SEARCH;
-            } else {
-                request.setAttribute("ERROR", "Invalid action");
-            }
+            //1.
+            String search = request.getParameter("txtSearch");
+            //2.
+            RegistrationDAO dao = new RegistrationDAO();
+            List<RegistrationDTO> result = dao.findByLikeName(search);
+            //3.
+            request.setAttribute("INFO", result);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            request.getRequestDispatcher("admin.jsp").forward(request, response);
         }
     }
 

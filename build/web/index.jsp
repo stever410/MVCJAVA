@@ -19,7 +19,7 @@
             <h1 class="col-sm-4">Login Form</h1>
             <form action="MainController" method="POST">
                 <div class="form-group col-sm-4">
-                    <label>Email address</label>
+                    <label>Username</label>
                     <input type="text" class="form-control" name="txtUsername" value="">
                 </div>
                 <div class="form-group col-sm-4">
@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-group col-sm-4">
                     <button type="submit" class="btn btn-primary" value="Login" name="action">Submit</button>
-                    <button type="submit" class="btn btn btn-link" value="Register" name="action">Register</button>
+                    <button type="submit" class="btn btn btn-secondary" value="Register" name="action">Register</button>
                 </div>
             </form>
         </div>
